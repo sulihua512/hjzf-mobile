@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+// 组件库的样式
+// import 'antd-mobile/dist/antd-mobile.css'
 
 ReactDOM.render(
   <React.StrictMode>
