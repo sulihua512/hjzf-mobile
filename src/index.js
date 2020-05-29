@@ -5,11 +5,15 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // 组件库的样式
 // import 'antd-mobile/dist/antd-mobile.css'
+// 引入字体图片
+import './assets/fonts/iconfont.css'
+
+
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+
+  <App />
+  ,
   document.getElementById('root')
 );
 
