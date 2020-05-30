@@ -14,11 +14,13 @@ dd {
   margin: 0;
   padding:0;
 }
-
 ul,li {    
     list-style: none;
 }
-
+/* 设置容器高度 */
+#root,.App {
+    height: 100%;
+}
 * {
     touch-action: pan-y;
     box-sizing: border-box; 

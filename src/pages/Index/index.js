@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { Carousel, Flex } from 'antd-mobile';
+import React, { Component } from 'react';
 import { BASE_URL } from '../../utils/axios';
 import { getSwiper, getGroups, getNews } from '../../utils/api/home'
 import Navs from '../../utils/navConf'
 // import './index.css'
 import './index.scss'
-import { Grid, WingBlank } from 'antd-mobile';
+import { Carousel, Flex, Grid, WingBlank, SearchBar } from 'antd-mobile';
+import { getCurrCity } from '../../utils/api/city';
 
 
 /* 
@@ -22,24 +22,53 @@ class Index extends Component {
         // 租房小组数据
         groups: [],
         // 资讯数据
-        news: []
-    }
-    componentDidMount() {
-        this.getSwiper()
-        this.getGroups()
-        this.getNews()
+        news: [],
+        // 搜索关键字
+        keyword: '',
+        // 当前定位城市
+        currCity: {
+            // 城市名字
+            label: '--',
+            // 城市id
+            value: ''
+        }
     }
 
-    // 获取轮播图数据
-    getSwiper = async () => {
-        const { status, data } = await getSwiper()
-        // console.log(res)
-        if (status === 200) {
-            // 响应式：修改轮播图的数据
+    componentDidMount() {
+        // this.getSwiper()
+        // this.getGroups()
+        // this.getNews()
+        // 优化：
+        this.loadAll()
+        this.getCurCity()
+    }
+    getCurCity = () => {
+        const { BMap } = window;
+        const myCity = new BMap.LocalCity();
+        myCity.get(async (result) => {
+            const cityName = result.name;
+            // console.log("当前定位城市:" + cityName);
+            const { status, data } = await getCurrCity(cityName)
+            if (status === 200) {
+                this.setState({
+                    currCity: data
+                })
+            }
+        });
+    }
+    // 获取首页所有接口数据
+    loadAll = async () => {
+        const [swiper, group, news] = await Promise.all([getSwiper(), getGroups(), getNews()])
+        // console.log('1. 获取首页所有数据', res)
+        // 2. 批量做响应式
+        if (swiper.status === 200) {
             this.setState({
-                swiper: data
+                swiper: swiper.data,
+                groups: group.data,
+                news: news.data
             }, () => {
                 this.setState({
+                    // 轮播图已经有数据了
                     isPlay: true
                 })
             })
@@ -95,17 +124,6 @@ class Index extends Component {
         )
     }
 
-    // 获取租房小组数据
-    getGroups = async () => {
-        const { status, data } = await getGroups()
-        if (status === 200) {
-            this.setState({
-                groups: data
-            })
-        }
-        // console.log(data)
-    }
-
     // 渲染租房小组
     renderGroup = () => {
         return (
@@ -132,16 +150,6 @@ class Index extends Component {
         )
     }
 
-    // 获取新闻资讯数据
-    getNews = async () => {
-        const { data, status } = await getNews()
-        if (status === 200) {
-            this.setState({
-                news: data
-            })
-        }
-    }
-
     // 渲染资讯
     renderNews = () => {
         return this.state.news.map(item => (
@@ -164,6 +172,30 @@ class Index extends Component {
         ))
     }
 
+
+    // 渲染顶部导航
+    renderTopNav = () => {
+        return (
+            <Flex justify="around" className="topNav">
+                <div className="searchBox">
+                    <div className="city" onClick={() => {
+                        this.props.history.push('/cityList')
+                    }}>
+                        {this.state.currCity.label}<i className="iconfont icon-arrow" />
+                    </div>
+                    <SearchBar
+                        value={this.state.keyword}
+                        onChange={(v) => this.setState({ keyword: v })}
+                        placeholder="请输入小区或地址"
+                    />
+                </div>
+                <div className="map" onClick={() => this.props.history.push('/map')}>
+                    <i key="0" className="iconfont icon-map" />
+                </div>
+            </Flex>
+        )
+    }
+
     render() {
         return (
             <div className="indexBox">
@@ -181,6 +213,9 @@ class Index extends Component {
                     <h3 className="group-title">最新资讯</h3>
                     <WingBlank size="md">{this.renderNews()}</WingBlank>
                 </div>
+
+                {this.renderTopNav()}
+
             </div >
         )
     }
