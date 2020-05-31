@@ -5,7 +5,7 @@ import Navs from '../../utils/navConf'
 // import './index.css'
 import './index.scss'
 import { Carousel, Flex, Grid, WingBlank, SearchBar } from 'antd-mobile';
-import { getCurrCity } from '../../utils/api/city';
+import { getCurCity } from '../../utils/index';
 
 
 
@@ -43,19 +43,13 @@ class Index extends Component {
         this.loadAll()
         this.getCurCity()
     }
-    getCurCity = () => {
-        const { BMap } = window;
-        const myCity = new BMap.LocalCity();
-        myCity.get(async (result) => {
-            const cityName = result.name;
-            // console.log("当前定位城市:" + cityName);
-            const { status, data } = await getCurrCity(cityName)
-            if (status === 200) {
-                this.setState({
-                    currCity: data
-                })
-            }
-        });
+    // 获取当前城市
+    getCurCity = async () => {
+        const res = await getCurCity()
+        // console.log(res)
+        this.setState({
+            currCity: res
+        })
     }
     // 获取首页所有接口数据
     loadAll = async () => {

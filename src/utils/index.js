@@ -1,7 +1,8 @@
 /* 
     全局公共的方法
 */
-import { getCurrCity } from '../../utils/api/city';
+import { getCurrCity } from './api/city';
+
 
 // 业务流程
 //      1. 如果没有本地数据->利用百度地图API获取当前城市->发送请求获取城市详细信息->并保存本地数据->Promise返回城市数据
@@ -20,7 +21,9 @@ export function getCurCity() {
                 // console.log("当前定位城市:" + cityName);
                 const { status, data } = await getCurrCity(cityName)
                 if (status === 200) {
+                    // 存储到本地
                     localStorage.setItem(CURR_CITY, JSON.stringify(data))
+                    // 外部调用=》拿到的结果/数据
                     reslove(data)
                 } else {
                     reject('errot')

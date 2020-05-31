@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { getCityList, getHotCity } from '../../utils/api/city'
+import { getCurCity } from '../../utils/index';
 
 /* 
     城市列表
@@ -27,7 +28,11 @@ class CityList extends Component {
                 cityIndex.unshift('hot')
             }
             // console.log(cityList)
-
+            // 获取当前城市
+            const curCity = await getCurCity()
+            cityList['#'] = [curCity]
+            cityIndex.unshift('#')
+            console.log(cityList);
         }
     }
 
