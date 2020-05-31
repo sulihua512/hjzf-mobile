@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getCityList } from '../../utils/api/city'
+import { getCityList, getHotCity } from '../../utils/api/city'
 
 /* 
     城市列表
@@ -18,9 +18,20 @@ class CityList extends Component {
             console.log('所有城市数据：', data);
             const { cityList,
                 cityIndex } = this.formatCities(data);
-            console.log('处理完的数据：', cityList, cityIndex)
+            // console.log('处理完的数据：', cityList, cityIndex)
+            // 获取热门城市数据=》加到设计好的数据中
+            const { data: dt, status: st } = await getHotCity()
+            // console.log('热门城市', res)
+            if (st === 200) {
+                cityList['hot'] = dt
+                cityIndex.unshift('hot')
+            }
+            // console.log(cityList)
+
         }
     }
+
+
     // 处理后台数据：按拼音首字母归类城市
     // 1. 创建formatCities方法
     // 2. 定义变量
@@ -46,7 +57,7 @@ class CityList extends Component {
         })
         // 这个类别数组（所有城市的拼音首字母）
         cityIndex = Object.keys(cityList).sort()
-        // 问题：老师，怎么渲染？ cityIndex =》cityList['b']
+        // cityIndex =》cityList['b']
         return {
             cityList,
             cityIndex
