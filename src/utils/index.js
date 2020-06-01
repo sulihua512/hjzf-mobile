@@ -3,7 +3,19 @@
 */
 import { getCurrCity } from './api/city';
 
-
+// 封装本地存储方法
+// 获取本地数据
+export const getLocalData = (key) => {
+    return window.localStorage.getItem(key)
+}
+// 设置本地数据
+export const setLocalData = (key, val) => {
+    window.localStorage.setItem(key, val)
+}
+// 删除本地数据
+export const removeLocalData = (key) => {
+    window.localStorage.removeItem(key)
+}
 // 业务流程
 //      1. 如果没有本地数据->利用百度地图API获取当前城市->发送请求获取城市详细信息->并保存本地数据->Promise返回城市数据
 //      2. 如果有本地数据->直接Promise.resolve(数据)返回
