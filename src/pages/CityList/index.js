@@ -163,6 +163,8 @@ class CityList extends Component {
                     className="city-index-item"
                     onClick={
                         () => {
+                            // 断点
+                            // debugger
                             this.listRef.scrollToRow(index)
                             // this.setState({
                             //     activeIndex: index
