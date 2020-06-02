@@ -19,7 +19,9 @@ class CityList extends Component {
         // 归类的数据
         cityList: {},
         // 列表归类的分类
-        cityIndex: []
+        cityIndex: [],
+        // 滚动到当前行的索引
+        activeIndex: 0
     }
     componentDidMount() {
         this.getCityData()
@@ -87,12 +89,12 @@ class CityList extends Component {
         }
     }
     // 格式化title
-    formTitle = (title) => {
+    formTitle = (title, isRight) => {
         switch (title) {
             case '#':
-                return '当前城市';
+                return isRight ? '当' : '当前城市';
             case 'hot':
-                return '热门城市';
+                return isRight ? '热' : '热门城市';
             default:
                 return title.toUpperCase()
 
@@ -151,7 +153,38 @@ class CityList extends Component {
             </div>
         );
     }
-
+    // 渲染右侧索引
+    renderCityIndex = () => {
+        const { cityIndex, activeIndex } = this.state;
+        return cityIndex.map((item, index) => {
+            return (
+                <li
+                    key={item}
+                    className="city-index-item"
+                    onClick={
+                        () => {
+                            this.listRef.scrollToRow(index)
+                            // this.setState({
+                            //     activeIndex: index
+                            // })
+                        }
+                    }
+                >
+                    <span className={activeIndex === index ? 'index-active' : ''}>
+                        {this.formTitle(item, true)}
+                    </span>
+                </li >
+            )
+        })
+    }
+    // 每次列表重新渲染都会执行
+    onRowsRendered = ({ startIndex }) => {
+        if (this.state.activeIndex !== startIndex) {
+            this.setState({
+                activeIndex: startIndex
+            })
+        }
+    }
     render() {
         return (
             <div className="cityListBox">
@@ -163,6 +196,11 @@ class CityList extends Component {
                 <AutoSizer>
                     {({ height, width }) => (
                         <List
+                            ref={(ele) => {
+                                this.listRef = ele
+                            }}
+                            scrollToAlignment="start"
+                            onRowsRendered={this.onRowsRendered}
                             className="listBox"
                             height={height}
                             rowCount={this.state.cityIndex.length}
@@ -172,7 +210,9 @@ class CityList extends Component {
                         />
                     )}
                 </AutoSizer>
-
+                <ul className="city-index">
+                    {this.renderCityIndex()}
+                </ul>
 
             </div>
         )
