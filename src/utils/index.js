@@ -47,3 +47,4 @@ export function getCurCity() {
         return Promise.resolve(currcity)
     }
 }
+export { CURR_CITY }
