@@ -60,7 +60,6 @@ export default class HouseList extends React.Component {
         return getListByFilters(this.cityId, this.filters, startIndex, stopIndex).then((res) => {
             console.log(res)
             // 做响应式
-
             if (res.status === 200) {
                 this.setState({
                     count: res.data.count,
@@ -81,8 +80,15 @@ export default class HouseList extends React.Component {
         const { list } = this.state;
         const item = list[index];
         // 处理item暂无数据的情况
+        // if (!item) {
+        //     return null
+        // }
         if (!item) {
-            return null
+            return (
+                <div style={style} key={key}>
+                    <p className={styles.loading}></p>
+                </div>
+            )
         }
         // 处理图片传递的key
         item.src = `${BASE_URL}${item.houseImg}`
