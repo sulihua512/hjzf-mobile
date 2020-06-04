@@ -71,8 +71,9 @@ export default class Filter extends Component {
       titleSelectedStatus: this.handleSel()
     }, () => {
       // 处理选择的数据
-      const res = this.handerFilterData()
-      console.log(res)
+      // const res = this.handerFilterData()
+      // console.log(res)
+      this.props.onFilter(this.handerFilterData())
     })
   }
   handleSel = () => {
