@@ -7,7 +7,7 @@ import styles from './index.module.css'
 export default class FilterMore extends Component {
   // 设置状态数据
   state = {
-    selected: []
+    selected: this.props.value
   }
   // 存储选中的条件：有就删除，没有就添加
   handerSel = (item) => {

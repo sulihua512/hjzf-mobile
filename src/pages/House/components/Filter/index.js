@@ -69,6 +69,10 @@ export default class Filter extends Component {
       openType: '',
       // 处理筛选器是否有选中高亮状态
       titleSelectedStatus: this.handleSel()
+    }, () => {
+      // 处理选择的数据
+      const res = this.handerFilterData()
+      console.log(res)
     })
   }
   handleSel = () => {
@@ -85,9 +89,9 @@ export default class Filter extends Component {
         newStatus[item] = true
       } else if (item === 'price' && cur[0] !== 'null') {
         newStatus[item] = true
-      } else if (item === 'more') {
+      } else if (item === 'more' && cur.length) {
         //todo:等待处理
-        newStatus[item] = false
+        newStatus[item] = true
       } else {
         newStatus[item] = false
       }
@@ -142,10 +146,44 @@ export default class Filter extends Component {
       const { characteristic, oriented, roomType, floor } = this.filterDates;
       let data = { characteristic, oriented, roomType, floor }
       return (
-        <FilterMore data={data} onCancel={this.onCancel}
+        <FilterMore data={data} value={this.selectedVals[openType]} onCancel={this.onCancel}
           onOk={this.onOk} />
       )
     }
+  }
+  // 处理列表接口需要的数据格式(后台)
+  handerFilterData = () => {
+    // 获取存储的筛选器数据
+    const { area, mode, price, more } = this.selectedVals
+    // 定义一个变量：存储处理的数据
+    const filterDate = {}
+    // 处理第一个筛选器
+    // 第一个筛选器比较特殊：二选一
+    let akey = area[0], aval;
+    // 1. 根据数组长度处理
+    if (area.length === 2) {
+      // 2. 数组长度是2
+      aval = area[1]
+    } else {
+      // 3. 数组长度是3
+      if (area[2] === 'null') {
+        // 3.1 第三个没选择条件
+        aval = area[1]
+      } else {
+        // 3.2 第三个选了条件
+        aval = area[2]
+      }
+    }
+    // 4 .
+    filterDate[akey] = aval
+    // 5. mode
+    filterDate.rentType = mode[0];
+    // 6. price 
+    filterDate.price = price[0];
+    // 7. more
+    filterDate.more = more.join(',');
+    // 8. 返回处理完的数据
+    return filterDate
   }
   render() {
     return (
