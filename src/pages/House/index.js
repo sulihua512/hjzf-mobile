@@ -7,12 +7,16 @@ import Filter from './components/Filter'
 import styles from './index.module.css'
 import { getCurCity } from '../../utils'
 import { getListByFilters } from '../../utils/api/house'
-import { AutoSizer, List } from 'react-virtualized';
+import { AutoSizer, List, InfiniteLoader } from 'react-virtualized';
+import HoustItem from '../../components/HouseItem'
+import { BASE_URL } from '../../utils/axios'
 
 export default class HouseList extends React.Component {
     state = {
         // 房源列表数据
-        list: []
+        list: [],
+        // 列表数据的总条数
+        count: 0
     }
     // 父组件接收子组件的数据
     onFilter = (filters) => {
@@ -31,12 +35,39 @@ export default class HouseList extends React.Component {
     }
     // 2. 根据筛选条件获取房源列表
     getHouseList = async () => {
-        const { status, data: { list } } = await getListByFilters(this.cityId, this.filters)
+        const { status, data: { list, count } } = await getListByFilters(this.cityId, this.filters)
         if (status === 200) {
             this.setState({
-                list
+                list,
+                count
             })
         }
+    }
+
+    // 判断当前行数据是否就位
+    isRowLoaded = ({ index }) => {
+        const { list } = this.state;
+        return !!list[index];
+    }
+
+    // 核心：加载更多数据
+    // fetch window上携带的
+    loadMoreRows = ({ startIndex, stopIndex }) => {
+        // return fetch(`path/to/api?startIndex=${startIndex}&stopIndex=${stopIndex}`)
+        //     .then(response => {
+        //         // Store response data in list...
+        //     })
+        return getListByFilters(this.cityId, this.filters, startIndex, stopIndex).then((res) => {
+            console.log(res)
+            // 做响应式
+
+            if (res.status === 200) {
+                this.setState({
+                    count: res.data.count,
+                    list: [...this.state.list, ...res.data.list]
+                })
+            }
+        })
     }
     // 行渲染模板
     rowRenderer = ({
@@ -46,10 +77,17 @@ export default class HouseList extends React.Component {
         isVisible,
         style,
     }) => {
+        // 当前行row的数据
+        const { list } = this.state;
+        const item = list[index];
+        // 处理item暂无数据的情况
+        if (!item) {
+            return null
+        }
+        // 处理图片传递的key
+        item.src = `${BASE_URL}${item.houseImg}`
         return (
-            <div key={key} style={style} >
-                {index}
-            </div>
+            <HoustItem {...item} key={key} style={style} />
         );
     }
     render() {
@@ -58,17 +96,28 @@ export default class HouseList extends React.Component {
                 {/* 条件筛选栏 */}
                 <Filter onFilter={this.onFilter} />
                 {/* 列表 */}
-                <AutoSizer>
-                    {({ height, width }) => (
-                        <List
-                            height={height}
-                            rowCount={this.state.list.length}
-                            rowHeight={160}
-                            rowRenderer={this.rowRenderer}
-                            width={width}
-                        />
+                <InfiniteLoader
+                    isRowLoaded={this.isRowLoaded}
+                    loadMoreRows={this.loadMoreRows}
+                    rowCount={this.state.count}
+                >
+                    {({ onRowsRendered, registerChild }) => (
+                        <AutoSizer>
+                            {({ height, width }) => (
+                                <List
+                                    className={styles.houseList}
+                                    width={width}
+                                    height={height}
+                                    onRowsRendered={onRowsRendered}
+                                    ref={registerChild}
+                                    rowCount={this.state.count}
+                                    rowHeight={130}
+                                    rowRenderer={this.rowRenderer}
+                                />
+                            )}
+                        </AutoSizer>
                     )}
-                </AutoSizer>
+                </InfiniteLoader>
             </div>
         )
     }
