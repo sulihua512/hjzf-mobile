@@ -16,6 +16,13 @@ const titleSelectedStatus = {
   price: false,
   more: false
 }
+// 筛选器当前选中的值
+const selectedVal = {
+  area: ['area', 'null'],
+  mode: ['null'],
+  price: ['null'],
+  more: []
+}
 export default class Filter extends Component {
   // 定义状态数据
   state = {
@@ -23,6 +30,8 @@ export default class Filter extends Component {
     titleSelectedStatus: { ...titleSelectedStatus },
     openType: ''
   }
+  // 当前选中筛选器条件
+  selectedVals = { ...selectedVal }
   componentDidMount() {
     this.getFilters()
   }
@@ -49,10 +58,42 @@ export default class Filter extends Component {
     return openType === 'area' || openType === 'mode' || openType === 'price'
   }
   // 确定的时候=》关闭前三个菜单的内容
-  onOk = () => {
+  onOk = (selectedVal) => {
+    // console.log('点击ok，传递过来的值：', selectedVal)
+    // 存储当前选中的值
+    const { openType } = this.state;
+    this.selectedVals[openType] = selectedVal
+    console.log('当前选中的筛选器条件', this.selectedVals)
+    const res = this.handleSel()
+    console.log(res)
     this.setState({
-      openType: ''
+      openType: '',
+      // 处理筛选器是否有选中高亮状态
+      titleSelectedStatus: this.handleSel()
     })
+  }
+  handleSel = () => {
+    // 新的高亮状态
+    const newStatus = {}
+    // 遍历存储的筛选条件数据
+    Object.keys(this.selectedVals).forEach((item) => {
+      // 获取对应的筛选条件数据
+      const cur = this.selectedVals[item];
+      // 判断是否有选中的值
+      if (item === 'area' && (cur[1] !== "null" || cur[0] === 'subway')) {
+        newStatus[item] = true
+      } else if (item === 'mode' && cur[0] !== 'null') {
+        newStatus[item] = true
+      } else if (item === 'price' && cur[0] !== 'null') {
+        newStatus[item] = true
+      } else if (item === 'more') {
+        //todo:等待处理
+        newStatus[item] = false
+      } else {
+        newStatus[item] = false
+      }
+    })
+    return newStatus;
   }
   // 取消的时候=》关闭前三个菜单的内容
   onCancel = () => {
@@ -69,6 +110,9 @@ export default class Filter extends Component {
       const { openType } = this.state;
       // picker的数据源
       let data, col = 1;
+      // 获取当前点击picker上一次选择的值
+      let lastSel = this.selectedVals[openType]
+      // console.log('111', lastSel)
       switch (openType) {
         case 'area': data = [area, subway]; col = 3;
           break;
@@ -80,7 +124,13 @@ export default class Filter extends Component {
           break;
       }
       return (
-        <FilterPicker data={data} col={col} onCancel={this.onCancel} onOk={this.onOk} />
+        <FilterPicker
+          key={openType}
+          value={lastSel}
+          data={data}
+          col={col}
+          onCancel={this.onCancel}
+          onOk={this.onOk} />
       )
     }
     return null
