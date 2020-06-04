@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Flex } from 'antd-mobile'
+import { Flex, Toast } from 'antd-mobile'
 
 import Filter from './components/Filter'
 // 导入样式
@@ -10,6 +10,7 @@ import { getListByFilters } from '../../utils/api/house'
 import { AutoSizer, List, InfiniteLoader } from 'react-virtualized';
 import HoustItem from '../../components/HouseItem'
 import { BASE_URL } from '../../utils/axios'
+import NoHouse from '../../components/NoHouse'
 
 export default class HouseList extends React.Component {
     state = {
@@ -37,6 +38,9 @@ export default class HouseList extends React.Component {
     getHouseList = async () => {
         const { status, data: { list, count } } = await getListByFilters(this.cityId, this.filters)
         if (status === 200) {
+            if (count > 0) {
+                Toast.success(`成功获取到${count}条房源数据`, 2)
+            }
             this.setState({
                 list,
                 count
@@ -96,34 +100,41 @@ export default class HouseList extends React.Component {
             <HoustItem {...item} key={key} style={style} />
         );
     }
+
+    // 渲染房源列表
+    renderHouseList = () => {
+        const { count } = this.state
+        return count !== 0 ? <InfiniteLoader
+            isRowLoaded={this.isRowLoaded}
+            loadMoreRows={this.loadMoreRows}
+            rowCount={this.state.count}
+        >
+            {({ onRowsRendered, registerChild }) => (
+                <AutoSizer>
+                    {({ height, width }) => (
+                        <List
+                            className={styles.houseList}
+                            width={width}
+                            height={height}
+                            onRowsRendered={onRowsRendered}
+                            ref={registerChild}
+                            rowCount={this.state.count}
+                            rowHeight={130}
+                            rowRenderer={this.rowRenderer}
+                        />
+                    )}
+                </AutoSizer>
+            )
+            }
+        </InfiniteLoader > : <NoHouse>暂无房源数据!</NoHouse>
+    }
     render() {
         return (
             <div className={styles.root}>
                 {/* 条件筛选栏 */}
                 <Filter onFilter={this.onFilter} />
                 {/* 列表 */}
-                <InfiniteLoader
-                    isRowLoaded={this.isRowLoaded}
-                    loadMoreRows={this.loadMoreRows}
-                    rowCount={this.state.count}
-                >
-                    {({ onRowsRendered, registerChild }) => (
-                        <AutoSizer>
-                            {({ height, width }) => (
-                                <List
-                                    className={styles.houseList}
-                                    width={width}
-                                    height={height}
-                                    onRowsRendered={onRowsRendered}
-                                    ref={registerChild}
-                                    rowCount={this.state.count}
-                                    rowHeight={130}
-                                    rowRenderer={this.rowRenderer}
-                                />
-                            )}
-                        </AutoSizer>
-                    )}
-                </InfiniteLoader>
+                {this.renderHouseList()}
             </div>
         )
     }
