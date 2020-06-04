@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { Carousel, Flex, Modal, Toast, NavBar, Icon } from 'antd-mobile'
-import axios from 'axios'
+// import axios from 'axios'
 import HouseItem from '../HouseItem'
 import styles from './index.module.css'
 import HousePackage from '../HousePackage'
 // 导入BASE_URL
-import BASE_URL from '../../utils/axios'
+
+import { getDetailById } from '../../utils/api/house'
+import { BASE_URL } from '../../utils/axios'
 // const BASE_URL = `http://localhost:8080`
 
 // 猜你喜欢
@@ -133,23 +135,20 @@ export default class HouseDetail extends Component {
   async getHouseDetail() {
     const { id } = this.props.match.params
 
-    // 开启loading
-    this.setState({
-      isLoading: true
-    })
+    // // 开启loading
+    // this.setState({
+    //   isLoading: true
+    // })
 
-    const res = await axios.get(
-      `http://localhost:8080/houses/5cc47c8d1439630e5b47d45d`
-    )
+    const { status, data } = await getDetailById(id)
 
     // console.log(res.data.body)
 
     this.setState({
-      houseInfo: res.data.body,
-      isLoading: false
+      houseInfo: data
     })
 
-    const { community, coord } = res.data.body
+    const { community, coord } = data
 
     // 渲染地图
     this.renderMap(community, coord)
@@ -234,7 +233,7 @@ export default class HouseDetail extends Component {
         <NavBar
           mode="dark"
           icon={<Icon type="left" />}
-          onLeftClick={() => console.log('onLeftClick')}
+          onLeftClick={() => this.props.history.goBack()}
           rightContent={[<i key="share" className="iconfont icon-share" />]}
         >
           房屋详情
