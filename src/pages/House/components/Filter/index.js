@@ -43,6 +43,7 @@ export default class Filter extends Component {
     if (status === 200) {
       // state中只存放和页面刷新有关的数据，所以数据应该存放在this实例上
       this.filterDates = data
+      // console.log(this.filterDates)
     }
   }
   // 父组件提供修改状态数据的方法
@@ -64,8 +65,6 @@ export default class Filter extends Component {
     const { openType } = this.state;
     this.selectedVals[openType] = selectedVal
     console.log('当前选中的筛选器条件', this.selectedVals)
-    const res = this.handleSel()
-    console.log(res)
     this.setState({
       openType: '',
       // 处理筛选器是否有选中高亮状态
@@ -135,6 +134,19 @@ export default class Filter extends Component {
     }
     return null
   }
+  // 渲染第四个筛选器
+  renderMore = () => {
+    const { openType } = this.state;
+    if (openType === 'more') {
+      // 获取more筛选器的数据
+      const { characteristic, oriented, roomType, floor } = this.filterDates;
+      let data = { characteristic, oriented, roomType, floor }
+      return (
+        <FilterMore data={data} onCancel={this.onCancel}
+          onOk={this.onOk} />
+      )
+    }
+  }
   render() {
     return (
       <div className={styles.root}>
@@ -149,7 +161,7 @@ export default class Filter extends Component {
           {this.renderPicker()}
 
           {/* 最后一个菜单对应的内容： */}
-          {/* <FilterMore /> */}
+          {this.renderMore()}
         </div>
       </div>
     )
