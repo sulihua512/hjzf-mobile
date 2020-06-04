@@ -97,7 +97,10 @@ export default class HouseList extends React.Component {
         // 处理图片传递的key
         item.src = `${BASE_URL}${item.houseImg}`
         return (
-            <HoustItem {...item} key={key} style={style} />
+            <HoustItem onClick={() => {
+                // 跳转到详情
+                this.props.history.push(`/detail/${item.houseCode}`)
+            }} {...item} key={key} style={style} />
         );
     }
 
