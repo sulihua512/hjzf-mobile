@@ -3,6 +3,9 @@
 */
 import { getCurrCity } from './api/city';
 
+// 定义token=>key
+const HJZFW_TOKEN = 'hjzfw_token';
+
 // 封装本地存储方法
 // 获取本地数据
 export const getLocalData = (key) => {
@@ -47,4 +50,4 @@ export function getCurCity() {
         return Promise.resolve(currcity)
     }
 }
-export { CURR_CITY }
+export { CURR_CITY, HJZFW_TOKEN }

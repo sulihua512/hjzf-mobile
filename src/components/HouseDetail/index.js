@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Carousel, Flex, Modal, Toast, NavBar, Icon } from 'antd-mobile'
+import { Carousel, Flex, NavBar, Icon } from 'antd-mobile'
 // import axios from 'axios'
 import HouseItem from '../HouseItem'
 import styles from './index.module.css'
@@ -56,7 +56,7 @@ const labelStyle = {
   userSelect: 'none'
 }
 
-const alert = Modal.alert
+// const alert = Modal.alert
 
 export default class HouseDetail extends Component {
   state = {
@@ -140,7 +140,7 @@ export default class HouseDetail extends Component {
     //   isLoading: true
     // })
 
-    const { status, data } = await getDetailById(id)
+    const { data } = await getDetailById(id)
 
     // console.log(res.data.body)
 
