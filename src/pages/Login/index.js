@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import styles from './index.module.css'
 import { login } from '../../utils/api/user'
 import { setLocalData, HJZFW_TOKEN } from '../../utils'
+import { withFormik } from 'formik';
 
 // 验证规则：
 // const REG_UNAME = /^[a-zA-Z_\d]{5,8}$/
@@ -54,6 +55,14 @@ class Login extends Component {
     }
   }
   render() {
+    const {
+      values,
+      touched,
+      errors,
+      handleChange,
+      handleBlur,
+      handleSubmit,
+    } = this.props;
     // 解构
     const { username, password } = this.state
     return (
@@ -67,11 +76,11 @@ class Login extends Component {
 
         {/* 登录表单 */}
         <WingBlank>
-          <form onSubmit={this.login}>
+          <form onSubmit={handleSubmit}>
             <div className={styles.formItem}>
               <input
-                value={username}
-                onChange={this.handerForm}
+                value={values.username}
+                onChange={handleChange}
                 className={styles.input}
                 name="username"
                 placeholder="请输入账号"
@@ -81,8 +90,8 @@ class Login extends Component {
             {/* <div className={styles.error}>账号为必填项</div> */}
             <div className={styles.formItem}>
               <input
-                value={password}
-                onChange={this.handerForm}
+                value={values.password}
+                onChange={handleChange}
                 className={styles.input}
                 name="password"
                 type="password"
@@ -108,4 +117,47 @@ class Login extends Component {
   }
 }
 
-export default Login
+// 使用withFormik高阶组件：
+// 1. 处理表单双向绑定
+// 2. 提交表单
+const MyLogin = withFormik({
+  // 双向绑定
+  mapPropsToValues: () => ({ username: '', password: '' }),
+
+  // Custom sync validation
+  // validate: values => {
+  //   const errors = {};
+
+  //   if (!values.name) {
+  //     errors.name = 'Required';
+  //   }
+
+  //   return errors;
+  // },
+
+  // 提交
+  handleSubmit: async (values, { props, setValues }) => {
+    console.log(values, props)
+    // 获取表单数据=》用户名和密码
+    const { username, password } = values
+
+    // 调用接口(test2,test2)
+    let { data, description, status } = await login({ username, password })
+    if (status === 200) {
+      // 登录成功
+      // 1. 本地存储token
+      setLocalData(HJZFW_TOKEN, data.token)
+      // 2. 跳转到个人中心
+      props.history.push('/home/profile')
+    } else {
+      // 登录失败
+      // 1.提示
+      Toast.fail(description, 2)
+      // 2. 清空输入框
+      setValues({ username: '', password: '' })
+    }
+  },
+
+  displayName: 'BasicForm',
+})(Login);
+export default MyLogin
