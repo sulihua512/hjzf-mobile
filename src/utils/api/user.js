@@ -15,3 +15,11 @@ export function getUser(token) {
         }
     })
 }
+// 退出登录
+export function logout(token) {
+    return http.post('/user/logout', {
+        headers: {
+            authorization: token
+        }
+    })
+}

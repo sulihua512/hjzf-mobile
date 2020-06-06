@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
-import { Grid, Button } from 'antd-mobile'
+import { Grid, Button, Toast, Modal } from 'antd-mobile'
 
 import { BASE_URL } from '../../utils/axios'
 
 import styles from './index.module.css'
-import { isAuth, getToken } from '../../utils'
-import { getUser } from '../../utils/api/user'
+import { isAuth, getToken, delToken } from '../../utils'
+import { getUser, logout } from '../../utils/api/user'
 
 // 菜单数据
 const menus = [
@@ -40,15 +40,51 @@ export default class Profile extends Component {
   getUserInfo = async () => {
     // 1. 登录：调用接口获取当前登录人信息/处理模板
     const { isLogin } = this.state;
-    const { status, data } = await getUser(getToken())
+    const { status, data, description } = await getUser(getToken())
     console.log('用户信息', data)
     if (status === 200) {
       this.setState({
         userInfo: data
       })
+    } else {
+      // token 过期处理
+      delToken()
+      Toast.info(description, 2);
+      this.props.history.push('/login')
     }
     // 2. 未登录：展示游客
     if (!isLogin) return;
+
+  }
+
+  // 退出的业务
+  // 1. 弹出一个确认对话框
+  // 2. 点击了确定之后才退出
+  logout = () => {
+    Modal.alert('提示', '确定退出登录吗???', [
+      { text: '取消' },
+      {
+        text: '确定',
+        onPress: async () => {
+          // console.log('退出登录');
+          // 退出登录
+          // 1. 服务器端退出：调用接口
+          const { status, description } = await logout(getToken())
+          if (status === 200) {
+            Toast.info(description, 2);
+            // 2. 本地退出：删除本地存储的token
+            delToken()
+            // 3. 处理登录状态
+            this.setState({
+              isLogin: false,
+              userInfo: null
+            })
+          }
+
+
+        }
+      },
+    ])
   }
   render() {
     const { history } = this.props
