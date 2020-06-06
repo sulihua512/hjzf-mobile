@@ -8,9 +8,11 @@ import { login } from '../../utils/api/user'
 import { setLocalData, HJZFW_TOKEN } from '../../utils'
 import { withFormik } from 'formik';
 
+import * as yup from 'yup'; // for everything
+
 // 验证规则：
-// const REG_UNAME = /^[a-zA-Z_\d]{5,8}$/
-// const REG_PWD = /^[a-zA-Z_\d]{5,12}$/
+const REG_UNAME = /^[a-zA-Z_\d]{5,8}$/
+const REG_PWD = /^[a-zA-Z_\d]{5,12}$/
 
 class Login extends Component {
   // 设置状态数据
@@ -57,14 +59,13 @@ class Login extends Component {
   render() {
     const {
       values,
-      touched,
       errors,
       handleChange,
-      handleBlur,
       handleSubmit,
     } = this.props;
+    console.log(errors);
     // 解构
-    const { username, password } = this.state
+    // const { username, password } = this.state
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
@@ -87,7 +88,7 @@ class Login extends Component {
               />
             </div>
             {/* 长度为5到8位，只能出现数字、字母、下划线 */}
-            {/* <div className={styles.error}>账号为必填项</div> */}
+            <div className={styles.error}>{errors.username}</div>
             <div className={styles.formItem}>
               <input
                 value={values.password}
@@ -99,7 +100,7 @@ class Login extends Component {
               />
             </div>
             {/* 长度为5到12位，只能出现数字、字母、下划线 */}
-            {/* <div className={styles.error}>账号为必填项</div> */}
+            <div className={styles.error}>{errors.password}</div>
             <div className={styles.formSubmit}>
               <button className={styles.submit} type="submit">
                 登 录
@@ -124,6 +125,8 @@ const MyLogin = withFormik({
   // 双向绑定
   mapPropsToValues: () => ({ username: '', password: '' }),
 
+
+  // 做校验
   // Custom sync validation
   // validate: values => {
   //   const errors = {};
@@ -134,6 +137,11 @@ const MyLogin = withFormik({
 
   //   return errors;
   // },
+  validationSchema: yup.object().shape({
+    username: yup.string().required('用户名必填！').matches(REG_UNAME, '长度为5到8位，只能出现数字、字母、下划线'),
+    password: yup.string().required('密码必填！').matches(REG_PWD, '长度为5到12位，只能出现数字、字母、下划线')
+  }),
+
 
   // 提交
   handleSubmit: async (values, { props, setValues }) => {
