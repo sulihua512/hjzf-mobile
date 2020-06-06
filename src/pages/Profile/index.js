@@ -6,7 +6,7 @@ import { Grid, Button, Toast, Modal } from 'antd-mobile'
 import { BASE_URL } from '../../utils/axios'
 
 import styles from './index.module.css'
-import { isAuth, getToken, delToken } from '../../utils'
+import { isAuth, delToken } from '../../utils'
 import { getUser, logout } from '../../utils/api/user'
 
 // 菜单数据
@@ -40,7 +40,7 @@ export default class Profile extends Component {
   getUserInfo = async () => {
     // 1. 登录：调用接口获取当前登录人信息/处理模板
     const { isLogin } = this.state;
-    const { status, data, description } = await getUser(getToken())
+    const { status, data, description } = await getUser()
     console.log('用户信息', data)
     if (status === 200) {
       this.setState({
@@ -69,7 +69,7 @@ export default class Profile extends Component {
           // console.log('退出登录');
           // 退出登录
           // 1. 服务器端退出：调用接口
-          const { status, description } = await logout(getToken())
+          const { status, description } = await logout()
           if (status === 200) {
             Toast.info(description, 2);
             // 2. 本地退出：删除本地存储的token

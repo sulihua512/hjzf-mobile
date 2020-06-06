@@ -9,17 +9,9 @@ export function login(data) {
 }
 // 获取当前登录人信息
 export function getUser(token) {
-    return http.get('/user', {
-        headers: {
-            authorization: token
-        }
-    })
+    return http.get('/user')
 }
 // 退出登录
 export function logout(token) {
-    return http.post('/user/logout', {
-        headers: {
-            authorization: token
-        }
-    })
+    return http.post('/user/logout', null)
 }

@@ -4,6 +4,7 @@
 
 import axios from 'axios';
 import { Toast } from 'antd-mobile';
+import { getToken } from '.';
 
 // 请求基础地址
 // const BASE_URL = 'http://api-haoke-dev.itheima.net'
@@ -15,7 +16,13 @@ const myAxios = axios.create({
 
 // 请求拦截器
 myAxios.interceptors.request.use(function (config) {
-    Toast.loading('Loading...', 1);
+    // 添加token
+    console.log('请求拦截器', config);
+    const { url, headers } = config, whiteList = ['/user/registered', '/user/login'];
+    if (url.startsWith('/user') && !whiteList.includes(url)) {
+        headers.authorization = getToken()
+    }
+    Toast.loading('加载中。。。', 0);
     return config;
 }, function (error) {
     return Promise.reject(error)
