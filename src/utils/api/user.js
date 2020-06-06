@@ -30,3 +30,9 @@ export function addFav(id) {
 export function delFav(id) {
     return http.delete(`/user/favorites/${id}`)
 }
+
+// 定义用户发布房源的API
+// 获取已发布房源 
+export const getUserHouses = () => {
+    return http.get('/user/houses')
+}
