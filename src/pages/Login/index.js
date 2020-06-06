@@ -29,38 +29,39 @@ class Login extends Component {
     })
   }
   // 处理表单登录
-  login = async (e) => {
-    // 阻止表单的默认行为
-    e.preventDefault()
-    // 获取表单数据=》用户名和密码
-    const { username, password } = this.state
-    // console.log(username, password)
-    // 校验
+  // login = async (e) => {
+  //   // 阻止表单的默认行为
+  //   e.preventDefault()
+  //   // 获取表单数据=》用户名和密码
+  //   const { username, password } = this.state
+  //   // console.log(username, password)
+  //   // 校验
 
-    // 调用接口(test2,test2)
-    let { data, description, status } = await login({ username, password })
-    if (status === 200) {
-      // 登录成功
-      // 1. 本地存储token
-      setLocalData(HJZFW_TOKEN, data.token)
-      // 2. 跳转
-      // this.props.history.push('/home/profile')
-      if (this.props.location.backUrl) {
-        this.props.history.replace(this.props.location.backUrl);
-      } else {
-        this.props.history.push('/home/profile')
-      }
-    } else {
-      // 登录失败
-      // 1.提示
-      Toast.fail(description, 2)
-      // 2. 清空输入框
-      this.setState({
-        username: '',
-        password: ''
-      })
-    }
-  }
+  //   // 调用接口(test2,test2)
+  //   let { data, description, status } = await login({ username, password })
+  //   if (status === 200) {
+  //     // 登录成功
+  //     // 1. 本地存储token
+  //     setLocalData(HJZFW_TOKEN, data.token)
+  //     // 2. 跳转
+  //     // this.props.history.push('/home/profile')
+  //     console.log('bugger', this.props)
+  //     if (this.props.location.backUrl) {
+  //       this.props.history.replace(this.props.location.backUrl);
+  //     } else {
+  //       this.props.history.push('/home/profile')
+  //     }
+  //   } else {
+  //     // 登录失败
+  //     // 1.提示
+  //     Toast.fail(description, 2)
+  //     // 2. 清空输入框
+  //     this.setState({
+  //       username: '',
+  //       password: ''
+  //     })
+  //   }
+  // }
   render() {
     const {
       values,
@@ -161,7 +162,12 @@ const MyLogin = withFormik({
       // 1. 本地存储token
       setLocalData(HJZFW_TOKEN, data.token)
       // 2. 跳转到个人中心
-      props.history.push('/home/profile')
+      // props.history.push('/home/profile')
+      if (props.location.backUrl) {
+        props.history.replace(props.location.backUrl);
+      } else {
+        props.history.push('/home/profile')
+      }
     } else {
       // 登录失败
       // 1.提示

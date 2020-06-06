@@ -17,7 +17,7 @@ const myAxios = axios.create({
 // 请求拦截器
 myAxios.interceptors.request.use(function (config) {
     // 添加token
-    console.log('请求拦截器', config);
+    // console.log('请求拦截器', config);
     const { url, headers } = config, whiteList = ['/user/registered', '/user/login'];
     if (url.startsWith('/user') && !whiteList.includes(url)) {
         headers.authorization = getToken()

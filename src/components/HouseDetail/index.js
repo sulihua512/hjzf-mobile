@@ -147,7 +147,7 @@ export default class HouseDetail extends Component {
       ])
     */
   handleFavorite = async () => {
-    if (!isAuth) {
+    if (!isAuth()) {
       //  没有登录=》不能收藏=》登录后可以
       Modal.alert('提示', '您没有登录，登陆后才能收藏，是否去登录', [
         { text: '取消' },
