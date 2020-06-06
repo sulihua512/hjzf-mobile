@@ -15,3 +15,8 @@ export function getUser(token) {
 export function logout(token) {
     return http.post('/user/logout', null)
 }
+
+// 根据ID和token检查当前房源是否收藏过
+export function checkFavById(id) {
+    return http.get(`/user/favorites/${id}`)
+}

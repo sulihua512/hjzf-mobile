@@ -8,6 +8,8 @@ import HousePackage from '../HousePackage'
 
 import { getDetailById } from '../../utils/api/house'
 import { BASE_URL } from '../../utils/axios'
+import { isAuth } from '../../utils'
+import { checkFavById } from '../../utils/api/user'
 // const BASE_URL = `http://localhost:8080`
 
 // 猜你喜欢
@@ -107,8 +109,22 @@ export default class HouseDetail extends Component {
 
     // 获取房屋数据
     this.getHouseDetail()
+    this.checkFav()
   }
 
+  // 页面加载的时候，如果用户登录了=》查询当前房源是否收藏过
+  checkFav = async () => {
+    if (!isAuth()) return;
+    const { id } = this.props.match.params;
+    const { status, data } = await checkFavById(id);
+    if (status === 200) {
+      // 查询成功，做响应式
+      // 根据返回的状态，激活按钮
+      this.setState({
+        isFavorite: data.isFavorite
+      })
+    }
+  }
   /* 
       收藏房源：
 
