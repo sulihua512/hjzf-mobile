@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/hjzf-mobile/static/css/main.4802aebe.chunk.css",
-    "main.js": "/hjzf-mobile/static/js/main.c37b5174.chunk.js",
-    "main.js.map": "/hjzf-mobile/static/js/main.c37b5174.chunk.js.map",
+    "main.css": "/hjzf-mobile/static/css/main.6ef2400f.chunk.css",
+    "main.js": "/hjzf-mobile/static/js/main.3b2a079b.chunk.js",
+    "main.js.map": "/hjzf-mobile/static/js/main.3b2a079b.chunk.js.map",
     "runtime-main.js": "/hjzf-mobile/static/js/runtime-main.238cf825.js",
     "runtime-main.js.map": "/hjzf-mobile/static/js/runtime-main.238cf825.js.map",
-    "static/css/2.8d2dfdb7.chunk.css": "/hjzf-mobile/static/css/2.8d2dfdb7.chunk.css",
-    "static/js/2.a98a358d.chunk.js": "/hjzf-mobile/static/js/2.a98a358d.chunk.js",
-    "static/js/2.a98a358d.chunk.js.map": "/hjzf-mobile/static/js/2.a98a358d.chunk.js.map",
+    "static/css/2.84416146.chunk.css": "/hjzf-mobile/static/css/2.84416146.chunk.css",
+    "static/js/2.4dfeb3da.chunk.js": "/hjzf-mobile/static/js/2.4dfeb3da.chunk.js",
+    "static/js/2.4dfeb3da.chunk.js.map": "/hjzf-mobile/static/js/2.4dfeb3da.chunk.js.map",
     "index.html": "/hjzf-mobile/index.html",
-    "precache-manifest.32f6e87922fc7967c3736148804299da.js": "/hjzf-mobile/precache-manifest.32f6e87922fc7967c3736148804299da.js",
+    "precache-manifest.7f373cf3bcfd283e4a6093097bcbc6d7.js": "/hjzf-mobile/precache-manifest.7f373cf3bcfd283e4a6093097bcbc6d7.js",
     "service-worker.js": "/hjzf-mobile/service-worker.js",
-    "static/css/2.8d2dfdb7.chunk.css.map": "/hjzf-mobile/static/css/2.8d2dfdb7.chunk.css.map",
-    "static/css/main.4802aebe.chunk.css.map": "/hjzf-mobile/static/css/main.4802aebe.chunk.css.map",
-    "static/js/2.a98a358d.chunk.js.LICENSE.txt": "/hjzf-mobile/static/js/2.a98a358d.chunk.js.LICENSE.txt",
+    "static/css/2.84416146.chunk.css.map": "/hjzf-mobile/static/css/2.84416146.chunk.css.map",
+    "static/css/main.6ef2400f.chunk.css.map": "/hjzf-mobile/static/css/main.6ef2400f.chunk.css.map",
+    "static/js/2.4dfeb3da.chunk.js.LICENSE.txt": "/hjzf-mobile/static/js/2.4dfeb3da.chunk.js.LICENSE.txt",
     "static/media/iconfont.css": "/hjzf-mobile/static/media/iconfont.f58b610e.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.238cf825.js",
-    "static/css/2.8d2dfdb7.chunk.css",
-    "static/js/2.a98a358d.chunk.js",
-    "static/css/main.4802aebe.chunk.css",
-    "static/js/main.c37b5174.chunk.js"
+    "static/css/2.84416146.chunk.css",
+    "static/js/2.4dfeb3da.chunk.js",
+    "static/css/main.6ef2400f.chunk.css",
+    "static/js/main.3b2a079b.chunk.js"
   ]
 }

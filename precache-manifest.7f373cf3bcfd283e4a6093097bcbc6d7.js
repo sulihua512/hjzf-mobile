@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "10b3abda564a01981c1b1ae34bdfcb33",
+    "revision": "1f6d179c6df6c1032b643b64a4c07207",
     "url": "/hjzf-mobile/index.html"
   },
   {
-    "revision": "60ba8c76d1d1e0bb27c0",
-    "url": "/hjzf-mobile/static/css/2.8d2dfdb7.chunk.css"
+    "revision": "dc2793629eb8c20bac94",
+    "url": "/hjzf-mobile/static/css/2.84416146.chunk.css"
   },
   {
-    "revision": "006838c03d9ccefa403f",
-    "url": "/hjzf-mobile/static/css/main.4802aebe.chunk.css"
+    "revision": "c8b27119c149dd293d62",
+    "url": "/hjzf-mobile/static/css/main.6ef2400f.chunk.css"
   },
   {
-    "revision": "60ba8c76d1d1e0bb27c0",
-    "url": "/hjzf-mobile/static/js/2.a98a358d.chunk.js"
+    "revision": "dc2793629eb8c20bac94",
+    "url": "/hjzf-mobile/static/js/2.4dfeb3da.chunk.js"
   },
   {
-    "revision": "4d47ffde3dc69784e8e23fd910817ef8",
-    "url": "/hjzf-mobile/static/js/2.a98a358d.chunk.js.LICENSE.txt"
+    "revision": "bdfdaee5779fe0c6a048c3619e9bf199",
+    "url": "/hjzf-mobile/static/js/2.4dfeb3da.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "006838c03d9ccefa403f",
-    "url": "/hjzf-mobile/static/js/main.c37b5174.chunk.js"
+    "revision": "c8b27119c149dd293d62",
+    "url": "/hjzf-mobile/static/js/main.3b2a079b.chunk.js"
   },
   {
     "revision": "175077c674f2ac48eedf",
