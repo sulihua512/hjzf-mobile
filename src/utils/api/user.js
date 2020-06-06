@@ -20,3 +20,13 @@ export function logout(token) {
 export function checkFavById(id) {
     return http.get(`/user/favorites/${id}`)
 }
+
+// 添加收藏
+export function addFav(id) {
+    return http.post(`/user/favorites/${id}`)
+}
+
+// 删除收藏
+export function delFav(id) {
+    return http.delete(`/user/favorites/${id}`)
+}

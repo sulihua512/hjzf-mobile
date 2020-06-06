@@ -43,8 +43,13 @@ class Login extends Component {
       // 登录成功
       // 1. 本地存储token
       setLocalData(HJZFW_TOKEN, data.token)
-      // 2. 跳转到个人中心
-      this.props.history.push('/home/profile')
+      // 2. 跳转
+      // this.props.history.push('/home/profile')
+      if (this.props.location.backUrl) {
+        this.props.history.replace(this.props.location.backUrl);
+      } else {
+        this.props.history.push('/home/profile')
+      }
     } else {
       // 登录失败
       // 1.提示

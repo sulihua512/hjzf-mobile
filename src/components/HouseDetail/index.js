@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Carousel, Flex, NavBar, Icon } from 'antd-mobile'
+import { Carousel, Flex, NavBar, Icon, Modal, Toast } from 'antd-mobile'
 // import axios from 'axios'
 import HouseItem from '../HouseItem'
 import styles from './index.module.css'
@@ -9,7 +9,7 @@ import HousePackage from '../HousePackage'
 import { getDetailById } from '../../utils/api/house'
 import { BASE_URL } from '../../utils/axios'
 import { isAuth } from '../../utils'
-import { checkFavById } from '../../utils/api/user'
+import { checkFavById, delFav, addFav } from '../../utils/api/user'
 // const BASE_URL = `http://localhost:8080`
 
 // 猜你喜欢
@@ -146,7 +146,44 @@ export default class HouseDetail extends Component {
         }
       ])
     */
-
+  handleFavorite = async () => {
+    if (!isAuth) {
+      //  没有登录=》不能收藏=》登录后可以
+      Modal.alert('提示', '您没有登录，登陆后才能收藏，是否去登录', [
+        { text: '取消' },
+        {
+          text: '确定',
+          onPress: async () => {
+            // 去登陆=》登录成功后=》跳回之前浏览的页面（需要传递当前页面的路径）
+            this.props.history.replace({ pathname: '/login', backUrl: this.props.location.pathname })
+          }
+        },
+      ])
+    } else {
+      // 登录
+      const { isFavorite } = this.state;
+      const { id } = this.props.match.params;
+      if (isFavorite) {
+        // 收藏过，做删除操作
+        const { status, description } = await delFav(id)
+        if (status === 200) {
+          Toast.success(description, 2)
+          this.setState({
+            isFavorite: false
+          })
+        }
+      } else {
+        // 没有收藏过，添加收藏操作
+        const { status, description } = await addFav(id)
+        if (status === 200) {
+          Toast.success(description, 2)
+          this.setState({
+            isFavorite: true
+          })
+        }
+      }
+    }
+  }
   // 获取房屋详细信息
   async getHouseDetail() {
     const { id } = this.props.match.params
