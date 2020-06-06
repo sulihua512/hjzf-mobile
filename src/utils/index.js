@@ -5,6 +5,20 @@ import { getCurrCity } from './api/city';
 
 // 定义token=>key
 const HJZFW_TOKEN = 'hjzfw_token';
+// 封装 token相关方法
+export function setToken(token) {
+    setLocalData(HJZFW_TOKEN, token)
+}
+export function getToken() {
+    return getLocalData(HJZFW_TOKEN)
+}
+export function delToken() {
+    return removeLocalData(HJZFW_TOKEN)
+}
+// 判断用户是否登录（是否有token）
+export function isAuth() {
+    return !!getToken()
+}
 
 // 封装本地存储方法
 // 获取本地数据

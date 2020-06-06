@@ -7,3 +7,11 @@ import http from '../axios'
 export function login(data) {
     return http.post('/user/login', data)
 }
+// 获取当前登录人信息
+export function getUser(token) {
+    return http.get('/user', {
+        headers: {
+            authorization: token
+        }
+    })
+}
