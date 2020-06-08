@@ -190,7 +190,13 @@ export default class RentAdd extends Component {
           renderHeader={() => '房屋配置'}
           data-role="rent-list"
         >
-          <HousePackage select />
+          <HousePackage select onSelect={
+            (selected) => {
+              this.setState({
+                supporting: selected.join('|')
+              })
+            }
+          } />
         </List>
 
         <List
