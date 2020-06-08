@@ -36,3 +36,7 @@ export function delFav(id) {
 export const getUserHouses = () => {
     return http.get('/user/houses')
 }
+// 发布房源
+export function pubHouse(data) {
+    return http.post('/user/houses', data)
+}

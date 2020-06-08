@@ -9,13 +9,16 @@ import {
   TextareaItem,
   Modal,
   NavBar,
-  Icon
+  Icon,
+  Toast
 } from 'antd-mobile'
 
 import HousePackage from '../../../components/HousePackage'
 
 import styles from './index.module.css'
 import { uploadImg } from '../../../utils/api/house'
+import { pubHouse } from '../../../utils/api/user'
+import { delToken } from '../../../utils'
 
 const alert = Modal.alert
 
@@ -112,7 +115,21 @@ export default class RentAdd extends Component {
 
   //  发布房源事件处理函数 let houseImg = '';
   addHouse = async () => {
-    const { tempSlides } = this.state;
+    const {
+      community,
+      price,
+      size,
+      roomType,
+      floor,
+      oriented,
+      description,
+      tempSlides,
+      title
+    } = this.state;
+    // 检验格式
+    if (!title || !price || !community) {
+      return Toast.info('房屋出租信息不完整', 2)
+    }
     let houseImg = '';
     if (tempSlides.length > 0) {
       // 大于0,说明有图片，处理上传=>fromData
@@ -122,8 +139,21 @@ export default class RentAdd extends Component {
       if (status === 200) {
         houseImg = data.join('|')
       }
-
-
+    }
+    // 传递的body数据
+    let _data = { title, description, houseImg, oriented, price, roomType, size, floor, community: community.id }
+    // 保存=》发布房源
+    const { status, description: des } = await pubHouse(_data)
+    if (status === 200) {
+      //成功
+      console.log('chenggon ')
+      Toast.success(des, 2)
+      // 跳转到房源管理页面
+      this.props.history.push('/rent')
+    } else {
+      Toast.fail(des, 2)
+      delToken();
+      this.props.history.replace({ pathname: '/login', backUrl: this.props.location.pathname })
     }
   }
   render() {

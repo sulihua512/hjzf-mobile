@@ -35,3 +35,4 @@ export function getDetailById(id) {
 export function uploadImg(fm) {
     return http.post('/houses/image', fm)
 }
+
