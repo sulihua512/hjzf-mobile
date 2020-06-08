@@ -15,6 +15,7 @@ import {
 import HousePackage from '../../../components/HousePackage'
 
 import styles from './index.module.css'
+import { uploadImg } from '../../../utils/api/house'
 
 const alert = Modal.alert
 
@@ -101,6 +102,30 @@ export default class RentAdd extends Component {
       [name]: val
     })
   }
+  // 处理本地图片选择
+  handlerImage = (files, type, index) => {
+    // console.log(files)
+    this.setState({
+      tempSlides: files
+    })
+  }
+
+  //  发布房源事件处理函数 let houseImg = '';
+  addHouse = async () => {
+    const { tempSlides } = this.state;
+    let houseImg = '';
+    if (tempSlides.length > 0) {
+      // 大于0,说明有图片，处理上传=>fromData
+      const fm = new FormData();
+      tempSlides.forEach(item => fm.append('file', item.file))
+      const { status, data } = await uploadImg(fm)
+      if (status === 200) {
+        houseImg = data.join('|')
+      }
+
+
+    }
+  }
   render() {
     const Item = List.Item
     const { history } = this.props
@@ -182,6 +207,7 @@ export default class RentAdd extends Component {
             files={tempSlides}
             multiple={true}
             className={styles.imgpicker}
+            onChange={this.handlerImage}
           />
         </List>
 

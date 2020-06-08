@@ -30,3 +30,8 @@ export function getDetailById(id) {
     // path的参数id
     return http.get(`/houses/${id}`)
 }
+
+// 图片上传
+export function uploadImg(fm) {
+    return http.post('/houses/image', fm)
+}
