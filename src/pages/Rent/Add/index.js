@@ -124,7 +124,8 @@ export default class RentAdd extends Component {
       oriented,
       description,
       tempSlides,
-      title
+      title,
+      supporting
     } = this.state;
     // 检验格式
     if (!title || !price || !community) {
@@ -141,7 +142,7 @@ export default class RentAdd extends Component {
       }
     }
     // 传递的body数据
-    let _data = { title, description, houseImg, oriented, price, roomType, size, floor, community: community.id }
+    let _data = { title, supporting, description, houseImg, oriented, price, roomType, size, floor, community: community.id }
     // 保存=》发布房源
     const { status, description: des } = await pubHouse(_data)
     if (status === 200) {
@@ -168,7 +169,7 @@ export default class RentAdd extends Component {
       oriented,
       description,
       tempSlides,
-      title
+      title,
     } = this.state
 
     return (
