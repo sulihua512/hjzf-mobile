@@ -5,8 +5,17 @@ import { getCurCity } from '../../utils';
 
 import styles from './index.module.css'
 import { getMapData } from '../../utils/api/city';
+import { getListByFilters } from '../../utils/api/house';
+import { BASE_URL } from '../../utils/axios';
+import HouseItem from '../../components/HouseItem'
 
 class Map extends Component {
+    state = {
+        // 当前点击小区的房源列表
+        list: [],
+        // 控制房源列表浮层是否显示
+        isShowList: false
+    }
 
     componentDidMount() {
         // 初始化百度地图
@@ -105,7 +114,8 @@ class Map extends Component {
           </div>
       `;
             ecallback = (e) => {
-                console.log(e, cname)
+                // console.log(e, cname)
+                this.handlerHouseList(value)
             }
         }
         // 当前覆盖物的坐标点
@@ -154,7 +164,53 @@ class Map extends Component {
         }
     }
 
+    // 获取小区的出租房源列表
+    handlerHouseList = async (id) => {
+        const { status, data: { list } } = await getListByFilters(id);
+        if (status === 200) {
+            this.setState({
+                // list: data,   data是一个对象
+                list,
+                isShowList: true
+            })
+        }
+    }
 
+    // 渲染小区下房屋列表
+    renderHouseList = () => {
+        return (
+            <div
+                className={[
+                    styles.houseList,
+                    this.state.isShowList ? styles.show : ''
+                ].join(' ')}
+            >
+                <div className={styles.titleWrap}>
+                    <h1 className={styles.listTitle}>房屋列表</h1>
+                    <a className={styles.titleMore} href="/home/house">
+                        更多房源
+    </a>
+                </div>
+
+                <div className={styles.houseItems}>
+                    {/* 房屋结构 */}
+                    {
+                        this.state.list.map(item => (
+                            <HouseItem
+                                onClick={() => this.props.history.push(`/detail/${item.houseCode}`)}
+                                key={item.houseCode}
+                                src={BASE_URL + item.houseImg}
+                                title={item.title}
+                                desc={item.desc}
+                                tags={item.tags}
+                                price={item.price}
+                            />
+                        ))
+                    }
+                </div>
+            </div>
+        )
+    }
     render() {
         return (
             <div className={styles.mapBox}>
@@ -166,6 +222,8 @@ class Map extends Component {
                 >地图找房</NavBar>
                 {/* 地图容器 */}
                 <div id="container"></div>
+                {/* 渲染小区房源列表 */}
+                {this.renderHouseList()}
             </div>
         );
     }
