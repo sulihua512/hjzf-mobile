@@ -53,6 +53,14 @@ class Map extends Component {
             }
         },
             label);
+        // 给地图添加事件
+        this.map.addEventListener('movestart', () => {
+            if (this.state.isShowList) {
+                this.setState({
+                    isShowList: false
+                })
+            }
+        })
 
     }
 
