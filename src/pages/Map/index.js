@@ -115,7 +115,10 @@ class Map extends Component {
       `;
             ecallback = (e) => {
                 // console.log(e, cname)
+                // 获取当前点击小区房源列表数据
                 this.handlerHouseList(value)
+                // 把当前的小区
+                this.moveToCenter(e)
             }
         }
         // 当前覆盖物的坐标点
@@ -210,6 +213,19 @@ class Map extends Component {
                 </div>
             </div>
         )
+    }
+    // 点击移动小区到中心点位置
+    moveToCenter = (e) => {
+        // 获取到当前点击到坐标点（位移开始）
+        const { clientX, clientY } = e.changedTouches[0];
+        // 获取中心点的位置(可视区域的=》y轴需要排除列表的高度)
+        let xc, yc;
+        xc = window.innerWidth / 2;
+        yc = (window.innerHeight - 330) / 2;
+        // 获取移动的距离(x,y)
+        let x = xc - clientX, y = yc - clientY;
+        // 调用百度地图提供的方法位移地图
+        this.map.panBy(x, y);
     }
     render() {
         return (
